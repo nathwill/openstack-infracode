@@ -1,0 +1,39 @@
+heat_template_version: 2015-04-30
+
+description: common components
+
+resources:
+  image:
+    type: OS::Glance::Image
+    properties:
+      name: CentOS 7.2
+      container_format: bare
+      disk_format: qcow2
+      location: http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2.xz
+      is_public: true
+      min_disk: 5
+      min_ram: 512
+      is_public: true
+
+  michael:
+    type: OS::Keystone::User
+    properties:
+      name: michael
+      email: michael.novacyu@teamtreehouse.com
+
+  nate:
+    type: OS::Keystone::User
+    properties:
+      name: nate
+      email: nate.meyer@teamtreehouse.com
+
+  nathan:
+    type: OS::Keystone::User
+    properties:
+      name: nathan
+      email: nathan.williams@teamtreehouse.com
+
+outputs:
+  image:
+    description: default image
+    value: { get_resource: image }

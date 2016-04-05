@@ -1,0 +1,7 @@
+parameters:
+  project_name: heatdemo
+  project_subnet: 10.241.36.0/22
+  subnet_dhcp_ranges:
+    - start: 10.241.36.2
+      end: 10.241.39.254
+  router: dff9483c-de50-43e1-a53e-4d7063b0ab0e

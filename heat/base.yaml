@@ -1,0 +1,95 @@
+heat_template_version: 2015-04-30
+
+description: set up core infrastructure
+
+parameters:
+  project_name:
+    type: string
+    label: Project Name
+    description: Name of the OpenStack project to create
+    constraints:
+      - description: must be between 3 and 12 characters
+        length: { min: 3, max: 12 }
+      - description: must contain only lower-case alnum characters
+        allowed_pattern: "[a-z0-9]+"
+
+  project_subnet:
+    type: string
+    label: Project Subnet
+    description: CIDR notated subnet to create
+    constraints:
+      - description: is a valid cidr range
+        custom_constraint: net_cidr
+
+  subnet_dhcp_ranges:
+    type: json
+    label: Subnet Allocation Range
+    description: Subnet DHCP Allocation Range
+
+  router:
+    type: string
+    label: Router ID
+    description: ID of Neutron Router to attach subnet interface to
+    constraints:
+      - description: must be an existing router ID
+        custom_constraint: neutron.router
+
+resources:
+  project:
+    type: OS::Keystone::Project
+    properties:
+      name: { get_param: project_name }
+
+  user:
+    type: OS::Keystone::User
+    properties:
+      name: { get_param: project_name }
+      default_project: { get_resource: project }
+# Broken in Liberty, not sure about Kilo
+# https://bugs.launchpad.net/heat/+bug/1509333
+#      roles:
+#        - project: { get_resource: project }
+#          role: _member_
+
+  net:
+    type: OS::Neutron::Net
+    properties:
+      name: { get_param: project_name }
+      tenant_id: { get_resource: project }
+
+  subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      name: { get_param: project_name }
+      tenant_id: { get_resource: project }
+      network: { get_resource: net }
+      cidr: { get_param: project_subnet }
+      allocation_pools: { get_param: subnet_dhcp_ranges }
+      enable_dhcp: true
+
+  interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router: { get_param: router }
+      subnet: { get_resource: subnet }
+
+outputs:
+  project:
+    description: project id
+    value: { get_resource: project }
+
+  user:
+    description: project user id
+    value: { get_resource: user }
+
+  net:
+    description: project network
+    value: { get_resource: net }
+
+  subnet:
+    description: project subnet
+    value: { get_resource: subnet }
+
+  interface:
+    description: project subnet gateway
+    value: { get_resource: interface }

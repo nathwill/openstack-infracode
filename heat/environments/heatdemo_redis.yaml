@@ -1,0 +1,4 @@
+parameters:
+  default_image: d3c28f0b-c4be-499d-8273-8524081cde24
+  default_key: ops
+  network: 257944a5-b869-475b-9a8c-bcc22bda6000

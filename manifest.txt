@@ -1,0 +1,44 @@
+Purpose
+=======
+minimal infrastructure designed to
+exercise essential functionalities
+
+Reference Docs
+==============
+https://docs.google.com/spreadsheets/d/1Vcmqs2jWrT1b2pe4CzzrB48ZiiFQT0GIV8nQDfaDmzk/edit#gid=0
+
+base
+====
+-- set up tenant
+-- set up users
+-- set up images
+
+environment
+===========
+-- keypairs
+-- set up networking (subnet/router/interface)
+
+services
+========
+common
+------
+-- security groups
+-- flavors
+-- servers
+-- ports
+-- floating-ips
+-- resource-groups (group code by app)
+-- bootstrap/provisioning
+
+redis
+-----
+-- server-group
+-- anti-affinity
+-- allowed_address_pairs (active-passive)
+
+load-balancer
+-------------
+-- LBAAS (active/active)
+-- volumes
+-- ASGs
+-- server-groups (anti-affinity)
